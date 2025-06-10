@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>TORNEIO DE VÔLEI </title>
+</head>
+<body>
+    <div class="container">
+        <h1>QUANTOS TIMES PARTICIPARÃO DO TORNEIO?</h1>
+        <form id="playerCountForm">
+          <label for="playerCount">Número de times:</label>
+          <input type="number" id="playerCount" min="1" required>
+          <button type="submit">Próximo</button>
+        </form>
+      </div>
+      
+      <div class="hidden" id="namesForm">
+        <h1>INSIRA O NOME DOS TIMES</h1>
+        <form id="teamNamesForm">
+          <div id="namesInput"></div>
+          <button type="submit">Enviar Nomes</button>
+        </form>
+      </div>
+    
+      <div class="hidden" id="tournamentResults">
+        <h1>RESULTADOS DO TORNEIO</h1>
+        <div id="winner"></div>
+        <h2>Pontuação dos times</h2>
+        <table id="table"></table>
+      </div>
+      <button id="showHistoryButton">Exibir Histórico</button>
+<div id="matchHistory" class="hidden"></div>
+
+
+      <script src="script.js"></script>
+</body>
+</html>

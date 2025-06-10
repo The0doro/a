@@ -1,0 +1,152 @@
+* {
+  font-family: volei;
+}
+
+body {
+    font-family: volei;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: orangered;
+}
+
+@font-face {
+    font-family: volei;
+    src: url(DIMIS___.TTF);
+}
+
+.container {
+    text-align: center;
+}
+
+.container h1 {
+    font-size: 50px;
+    padding-bottom: 7vw;
+}
+
+.Cartão1 {
+    border: solid 5px black;
+    border-radius: 10px;
+    background-color: orange;
+    padding: 2vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Cartão1 h2 {
+    font-size: 30px;
+}
+
+h3 {
+    font-size: 40px;
+}
+
+h4 {
+    font-size: 35px;
+    padding: 0;
+}
+
+form button {
+    font-family: volei;
+    background-color: orange;
+    color: black;
+    padding: 8px 13px;
+    border: solid black 5px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+form button::after {
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.5);
+    /* Sombra após o objeto "saltar" */
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    z-index: -1;
+}
+
+form button:hover {
+    scale: 1 1;
+    transition: all 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transform: scale(1.10, 1.10);
+}
+
+button {
+    background-color: orangered;
+    color: black;
+    padding: 8px 13px;
+    border: solid black 5px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#tabela {
+    font-size: 20px;
+    margin-left: 15vw;
+}
+
+#botaoVoltar {
+    margin-left: 30vw;
+}
+
+button::after {
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.5);
+    /* Sombra após o objeto "saltar" */
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    z-index: -1;
+}
+
+button:hover {
+    scale: 1 1;
+    transition: all 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+label {
+    font-size: 20px;
+}
+
+div#vencedor {
+    font-size: 30px;
+}
+
+.botoes::after {
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.5);
+  /* Sombra após o objeto "saltar" */
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: -1;
+}
+
+.botoes:hover {
+  scale: 1 1;
+  transition: all 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+label {
+    margin-right: 10px;
+}
+
+input#contagemJogadores {
+    padding: 0.2vw 1vw;
+}
+
+#entradaNomes label {
+    font-size: 25px;
+}
+
+#entradaNomes input {
+    padding: 0.2vw 1vw;
+}
+
+input {
+    width: 40px;
+}
+
+button {
+    padding: 10px 20px;
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none;
+}

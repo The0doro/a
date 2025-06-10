@@ -1,0 +1,149 @@
+const playerCountForm = document.getElementById('playerCountForm');
+const namesForm = document.getElementById('namesForm');
+const tournamentResults = document.getElementById('tournamentResults');
+const matchHistorySection = document.getElementById('matchHistory');
+const table = document.getElementById('table');
+const winnerDiv = document.getElementById('winner');
+const MAX_PARTICIPANTS = 20;
+const matchHistory = [];
+
+const showHistoryButton = document.getElementById('showHistoryButton');
+
+showHistoryButton.addEventListener('click', function() {
+  if (matchHistorySection.classList.contains('hidden')) {
+    matchHistorySection.classList.remove('hidden');
+    showHistoryButton.textContent = 'Ocultar Histórico';
+  } else {
+    matchHistorySection.classList.add('hidden');
+    showHistoryButton.textContent = 'Exibir Histórico';
+  }
+});
+
+
+playerCountForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+  const playerCount = parseInt(document.getElementById('playerCount').value);
+
+  if (playerCount > 0 && playerCount <= MAX_PARTICIPANTS) {
+    // Show names form and hide player count form
+    playerCountForm.classList.add('hidden');
+    namesForm.classList.remove('hidden');
+
+    // Create input fields for player names
+    const namesInput = document.getElementById('namesInput');
+    namesInput.innerHTML = '';
+    for (let i = 1; i <= playerCount; i++) {
+      const label = document.createElement('label');
+      label.textContent = `Nome do time ${i}: `;
+      const input = document.createElement('input');
+      input.setAttribute('type', 'text');
+      input.setAttribute('required', true);
+      input.setAttribute('name', `player${i}`);
+      namesInput.appendChild(label);
+      namesInput.appendChild(input);
+      namesInput.appendChild(document.createElement('br'));
+    }
+  } else {
+    if (playerCount <= 0) {
+      alert('Por favor, insira um número válido de times.');
+    } else {
+      alert(`O número máximo de times participantes é ${MAX_PARTICIPANTS}.`);
+    }
+  }
+});
+
+namesForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  // Retrieve player names
+  const playerNames = [];
+  const inputs = namesForm.querySelectorAll('input');
+  inputs.forEach(input => {
+    playerNames.push(input.value);
+  });
+
+  // Hide names form and show tournament results
+  namesForm.classList.add('hidden');
+  tournamentResults.classList.remove('hidden');
+
+  simulateTournament(playerNames);
+  displayMatchHistory();
+});
+
+function simulateTournament(players) {
+  const numPlayers = players.length;
+
+  // Create a matrix to store the results of each game and initialize points
+  const results = [];
+  const points = {};
+
+  for (let i = 0; i < numPlayers; i++) {
+    results[i] = [];
+    for (let j = 0; j < numPlayers; j++) {
+      if (i === j) {
+        results[i][j] = '-';
+      } else {
+        if (!results[j] || results[j][i] === undefined) {
+          results[i][j] = Math.random() < 0.33 ? 'D' : Math.random() < 0.66 ? 'E' : 'V';
+
+          if (results[i][j] === 'V') {
+            points[players[i]] = (points[players[i]] || 0) + 3;
+          } else if (results[i][j] === 'E') {
+            points[players[i]] = (points[players[i]] || 0) + 1;
+            points[players[j]] = (points[players[j]] || 0) + 1;
+          } else if (results[i][j] === 'D') {
+            points[players[j]] = (points[players[j]] || 0) + 3;
+          }
+
+          // Add the match to the match history
+          matchHistory.push({
+            team1: players[i],
+            team2: players[j],
+            result: results[i][j],
+          });
+        } else {
+          results[i][j] = results[j][i] === 'V' ? 'D' : 'V';
+        }
+      }
+    }
+  }
+
+  displayResults(players, results, points);
+}
+
+function displayResults(players, results, points) {
+  const numPlayers = players.length;
+
+  players.sort((a, b) => (points[b] || 0) - (points[a] || 0));
+
+  const winner = players[0];
+  winnerDiv.textContent = `O vencedor do torneio é: ${winner} com ${points[winner] || 0} pontos`;
+
+  const headerRow = table.insertRow();
+  headerRow.insertCell().textContent = 'Times';
+  headerRow.insertCell().textContent = 'Pontos';
+
+  for (let i = 0; i < numPlayers; i++) {
+    const row = table.insertRow();
+    const playerName = players[i];
+    row.insertCell().textContent = playerName;
+    row.insertCell().textContent = points[playerName] || 0;
+  }
+}
+
+
+function displayMatchHistory() {
+  const matchHistoryTable = document.createElement('table');
+
+  matchHistory.forEach((match, index) => {
+    const row = matchHistoryTable.insertRow();
+    const matchNumberCell = row.insertCell();
+    matchNumberCell.textContent = `Partida ${index + 1}`;
+    const teamsCell = row.insertCell();
+    teamsCell.textContent = `${match.team1} vs ${match.team2}`;
+    const resultCell = row.insertCell();
+    resultCell.textContent = match.result;
+  });
+
+  matchHistorySection.appendChild(matchHistoryTable);
+}
