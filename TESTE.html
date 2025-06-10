@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Bandeiras</title>
+    <style>
+
+        body {
+            margin: 0;
+            background-image: url();
+            background-size: 35%;
+            background-position: bottom;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+
+        /*
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        */
+
+        #luzacerto {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 255, 0, 0.8);
+            display: none;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        #luzacerto.ativa {
+            display: block;
+            animation: neon-flash 1s ease-in-out forwards;
+        }
+
+        @keyframes neon-flash {
+            0% {
+                opacity: 0;
+                filter: blur(15px);
+            }
+            50% {
+                opacity: 1;
+                filter: blur(0px);
+            }
+            100% {
+                opacity: 0;
+                filter: blur(15px);
+            }
+        }
+
+        #containerprin {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #007BFF;
+            padding: 30px;
+            border-radius: 15px;
+            z-index: 999;
+            box-shadow:  15px 15px 5px 2px rgba(0, 0, 0, 0.3);
+            width: 600px;
+            height: 600px;
+            margin: auto;
+            top: 100px;
+        }
+
+        #tutorial {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 550px;
+            height: 60%;
+            background-color: #007BFF;
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1002;
+            text-align: center;
+            display: none;
+            font-size: 20px;
+            line-height: 1.5;
+            font-weight: bold;
+        }
+
+        /*
+        #tutorial p {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.5;
+        } */
+
+        #tutorial-titulo {
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        #tutorial-texto {
+            font-size: 28px;
+        }
+
+        #botaoComec {
+            margin-top: 120px;
+            padding: 25px 45px;
+            font-size: 32px;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #botaoComec:hover {
+            background-color: #218838;
+        }
+
+
+        #conta-round {
+            font-size: 24px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        #PT, #botaohisto {
+            position: fixed;
+            top: 10px;
+            font-size: 22px;
+            color: white;
+            background-color:#007BFF;
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 999;
+            box-shadow: 5px 5px 5px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        #PT {
+            right: 10px;
+        }
+
+        #botaohisto {
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            transition: 0.2s; 
+        }
+
+        #botaohisto:hover {
+            transform: scale(1.1) translateX(-45%);
+        }
+
+
+        #botaoreset {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            z-index: 999;
+            transition: 0.5s ease; 
+        }
+
+        #botaoreset:hover {
+            transform: scale(1.2) rotate(360deg); 
+        }
+
+
+        #imgband {
+            max-width: 400px;
+            max-height: 250px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            object-fit: contain;
+        }
+
+
+        #escolhas {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        button {
+            width: 250px;
+            margin: 10px;
+            padding: 10px;
+            font-size: 18px;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #sobrepos {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1001;
+            display: none;
+        }
+
+        #popup-resultado, #popup-hist {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1001;
+        }
+
+        #result, #hist-titulo {
+            font-size: 22px;
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #listahist {
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 18px;
+            color: white;
+        }
+
+        #jogardnv, #sairjogo, #fechahist {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin-top: 10px;
+            margin-left: 10px;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #jogardnv:hover, #sairjogo:hover, #fechahist:hover {
+            background-color: #218838;
+        }
+
+        #sairjogo {
+            background-color: #dc3545;
+            position: relative; /* Necessário para posicionar o balão */
+        }
+
+        #sairjogo:hover {
+            background-color: #c82333;
+        }
+
+
+        #sairjogo:hover::after {
+            content: "Fechar a aba";
+            position: absolute;
+            top: -30px; /* Posição do balão em relação ao botão */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #007BFF;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1002; /* Deve estar acima de tudo */
+        }
+
+    </style>
+</head>
+<body>
+
+ <!--
+    <div class="video-background">
+        <video autoplay loop>
+            <source src="bladerunner.webm" type="video/webm">
+        </video>
+    </div>
+-->
+    <div id="luzacerto"></div>
+    <div id="PT">Pontos: 0</div>
+    <div id="botaohisto">Histórico</div>
+    <img id="botaoreset" src="restart2.png" alt="Reset" />
+
+    <div id="containerprin">
+        <div id="conta-round">Bandeira 1</div>
+        <img id="imgband" alt="Bandeira Pais" />
+        <div id="escolhas">
+            <button id="escA"></button>
+            <button id="escB"></button>
+            <button id="escC"></button>
+            <button id="escD"></button>
+        </div>
+    </div>
+
+    <div id="sobrepos"></div>
+
+    <div id="tutorial">
+        <div id="tutorial-titulo">TUTORIAL</div>
+        <div id="tutorial-texto">
+            <p>Tente adivinhar o máximo possível de países representados pela bandeira que vai aparecer.</p>
+            <p>No futuro iremos acrescentar novos modos e dificuldades pro jogo!</p>
+        </div>
+        <button id="botaoComec">Começar</button>
+    </div>
+
+    <div id="popup-resultado">
+        <div id="result"></div>
+        <button id="jogardnv">Jogar Novamente</button>
+        <button id="sairjogo">Sair</button>
+    </div>
+
+    <div id="popup-hist">
+        <div id="hist-titulo">Histórico</div>
+        <div id="listahist"></div>
+        <button id="fechahist">Fechar</button>
+    </div>
+
+    <script>
+     /* Legenda caso precise pra siglas:
+        RA: Rodada atual
+        P: Pontos
+        HJ: Historico do jogto
+        BD: Bandeiras
+        */
+        let RA = 1;
+        let PT = 0;
+        let HJ = []; 
+        let BD = [];
+
+
+        //precisei de ajuda pra resolver esse problema do API com o async
+        async function pegaPais() {
+            const resposta = await fetch('https://restcountries.com/v3.1/all');
+            return resposta.json();
+        }
+
+        // PE = pais escolhido
+        function pegarUmPais(PE) {
+            const paisresto = PE.filter(pais => !BD.includes(pais.cca3)); //precisei de ajuda aqui também por que é um código ISO relacionado a não sei oque, foi bem dificil de decifrar isso, admito que não entendi muito bem
+            if (paisresto.length === 0) {
+                return null;
+            }
+            return paisresto[Math.floor(Math.random() * paisresto.length)];
+        }
+
+        //PC =  pais certo | PA = pais aleatorio
+
+        function pegarUmaEsc(PE, PC) {
+            const escolhas = [PC];
+            while (escolhas.length < 4) {
+                let PA;
+                do {
+                    PA = PE[Math.floor(Math.random() * PE.length)];
+                } while (escolhas.some(option => option.cca3 === PA.cca3));
+                escolhas.push(PA);
+            }
+            return escolhas.sort(() => Math.random() - 0.5);
+        }
+
+        function partidaJogo(PE) {
+            if (RA > 25) {
+                salvaHJ();
+                mostraResult();
+                return;
+            }
+
+            const PC = pegarUmPais(PE);
+            if (!PC) {
+                salvaHJ();
+                mostraResult();
+                return;
+            }
+
+            BD.push(PC.cca3); // Marca a bandeira como usada
+
+            const imagemBand = document.getElementById('imgband');
+            const ESC = [document.getElementById('escA'), document.getElementById('escB'), document.getElementById('escC'), document.getElementById('escD')];
+            const ESCUNICA = pegarUmaEsc(PE, PC);
+
+            imagemBand.src = PC.flags.png;
+
+            // OP = opção
+            ESCUNICA.forEach((OP, index) => {
+                ESC[index].textContent = OP.name.common;
+                ESC[index].onclick = () => {
+                    if (OP === PC) {
+                        PT++;
+                        updPT();
+                        efeitoLuz();
+                    }
+                    RA++;
+                    resetCorBotao();
+                    partidaJogo(PE);
+                };
+            });
+
+            document.getElementById('conta-round').textContent = `Bandeira ${RA}`;
+        }
+
+        document.getElementById('botaoComec').onclick = comecarJogoTutorial;
+
+        function mostrarTuto() {
+            document.getElementById('sobrepos').style.display = 'block';
+            document.getElementById('tutorial').style.display = 'block';
+        }
+
+        // Função para esconder o card de tutorial do jogo e a sobreposição e ai começar o jogo
+        function comecarJogoTutorial() {
+            document.getElementById('sobrepos').style.display = 'none';
+            document.getElementById('tutorial').style.display = 'none';
+            iniciaJogo();
+        }
+
+        window.onload = mostrarTuto;
+
+
+        function updPT() {
+            document.getElementById('PT').textContent = `Pontos: ${PT}`;
+        }
+
+        function resetCorBotao() {
+            const botoes = document.querySelectorAll('#escolhas button');
+            botoes.forEach(button => {
+                button.style.backgroundColor = '#28a745';
+            });
+        }
+
+        function mostraResult() {
+            document.getElementById('sobrepos').style.display = 'block';
+            document.getElementById('popup-resultado').style.display = 'block';
+            document.getElementById('result').textContent = `Você conseguiu ${PT} pontos!`;
+        }
+
+        function escResult() {
+            document.getElementById('sobrepos').style.display = 'none';
+            document.getElementById('popup-resultado').style.display = 'none';
+        }
+
+        function rejogar() {
+            salvaHJ(); // Salva a pontuação atual no histórico antes de reiniciar
+            RA = 1;
+            PT = 0;
+            BD = [];
+            updPT();
+            escResult();
+            iniciaJogo();
+        }
+
+
+        // foi dificil fazer o efeito de luz também
+        function efeitoLuz() {
+            const elementoLuz = document.getElementById('luzacerto');
+            elementoLuz.classList.add('ativa');
+            elementoLuz.addEventListener('animationend', () => { 
+                elementoLuz.classList.remove('ativa');
+            }, { once: true });
+        }
+
+
+        function salvaHJ() {
+            HJ.push(`Jogo ${HJ.length + 1}:\nPontuação: ${PT}/25`);
+            attHistorico();
+        }
+
+        function attHistorico() {
+            const LA = document.getElementById('listahist');
+            LA.innerHTML = HJ.join('<br><br>');
+        }
+
+        function mostrarHistorico() {
+            document.getElementById('sobrepos').style.display = 'block';
+            document.getElementById('popup-hist').style.display = 'block';
+        }
+
+        function esconderHistorico() {
+            document.getElementById('sobrepos').style.display = 'none';
+            document.getElementById('popup-hist').style.display = 'none';
+        }
+
+        document.getElementById('botaoreset').onclick = rejogar;
+        document.getElementById('jogardnv').onclick = rejogar;
+        document.getElementById('sairjogo').onclick = () => window.close();
+        document.getElementById('botaohisto').onclick = mostrarHistorico;
+        document.getElementById('fechahist').onclick = esconderHistorico;
+
+        async function iniciaJogo() {
+            const paises = await pegaPais();
+            partidaJogo(paises);
+        }
+
+        iniciaJogo();
+    </script>
+</body>
+</html>
